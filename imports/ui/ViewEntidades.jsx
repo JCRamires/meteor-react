@@ -6,17 +6,21 @@ import { createContainer } from 'meteor/react-meteor-data'
 
 import {Entidades} from '../api/collections.js'
 
+import EntidadeRow from '../ui/EntidadeRow.jsx'
+
 export default class ViewEntidade extends Component {
     renderEntidades(){
-        return this.props.entidades.map((entidade) => {
+        return this.props.entidades.map((entidade) => (
             <EntidadeRow key={entidade._id} nome={entidade.nome} endereco={entidade.endereco} />
-        })
+        ))
     }
 
     render(){
         return (
             <div>
-                {this.renderEntidades()}
+                <ul>
+                    {this.renderEntidades()}
+                </ul>
             </div>
         )
     }
