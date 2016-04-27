@@ -11,7 +11,7 @@ import EntidadeRow from '../ui/EntidadeRow.jsx'
 export default class ViewEntidade extends Component {
     renderEntidades(){
         return this.props.entidades.map((entidade) => (
-            <EntidadeRow key={entidade._id} nome={entidade.nome} endereco={entidade.endereco} />
+            <EntidadeRow key={entidade._id} nome={entidade.nome} endereco={entidade.endereco} tipo={entidade.tipo} documento={entidade.documento} />
         ))
     }
 
