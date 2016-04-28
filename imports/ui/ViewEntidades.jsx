@@ -17,10 +17,12 @@ export default class ViewEntidade extends Component {
 
     render(){
         return (
-            <div>
-                <ul>
-                    {this.renderEntidades()}
-                </ul>
+            <div className='ui grid'>
+                <div className='row'>
+                    <div className='column'>
+                        {this.renderEntidades()}
+                    </div>
+                </div>
             </div>
         )
     }

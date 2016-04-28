@@ -3,9 +3,9 @@ import React, {Component, PropTypes} from 'react'
 export default class EntidadeRow extends Component{
     render(){
         return (
-            <li>
+            <div>
                 Nome: {this.props.nome} Endereço: {this.props.endereco} Tipo: {this.props.tipo} Documento: {this.props.documento}
-            </li>
+            </div>
         )
     }
 }

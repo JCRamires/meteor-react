@@ -12,6 +12,51 @@ export default class FormEntidade extends Component{
         this.state = {nome: '', endereco: '', tipo: 1}
     }
 
+    componentDidMount(){
+        this.updateForm()
+    }
+
+    componentDidUpdate(){
+        this.updateForm()
+    }
+
+    updateForm(){
+        $('.entidade-form').form({
+            inline: true,
+            fields:{
+                name:{
+                    identifier: 'nomeEntidade',
+                    rules: [{
+                        type: 'empty',
+                        prompt: 'Digite o nome'
+                    }]
+                },
+                endereco:{
+                    identifier: 'enderecoEntidade',
+                    rules: [{
+                        type: 'empty',
+                        prompt: 'Digite o endereço'
+                    }]
+                },
+                documento: {
+                    identifier: 'documentoEntidade',
+                    rules: [{
+                        type: 'empty',
+                        prompt: 'Digite o documento'
+                    }]
+                }
+            },
+            onSuccess: (event, fields) => {
+                Meteor.call('entidade.insert', {
+                    nome: fields.nomeEntidade,
+                    endereco: fields.enderecoEntidade,
+                    tipo: Number.parseInt(fields.tipoEntidade),
+                    documento: fields.documentoEntidade
+                })
+            }
+        })
+    }
+
     onTipoChanged(e){
         this.setState({
             tipo: Number.parseInt(e.currentTarget.value)
@@ -20,12 +65,6 @@ export default class FormEntidade extends Component{
 
     handleSubmit(e){
         e.preventDefault()
-        Meteor.call('entidade.insert', {
-            nome: this.refs.entidadeNome.value,
-            endereco: this.refs.entidadeEndereco.value,
-            tipo: this.state.tipo,
-            documento: this.refs.inputDocumento.refs.documento.value
-        })
     }
 
     getInputDocumento(){
@@ -46,20 +85,30 @@ export default class FormEntidade extends Component{
 
     render(){
         return (
-            <form className='entidade-form' onSubmit={this.handleSubmit.bind(this)}>
-                <div className='label-form'>Nome</div>
-                <input type='text' ref='entidadeNome' placeholder='Nome da entidade' /><br />
-                <br />
-                <div className='label-form'>Endereço</div>
-                <input type='text' ref='entidadeEndereco' placeholder='Endereço da entidade' /><br />
-                <br />
-                <div className='label-form'>Tipo</div>
-                <input type='radio' name='tipo-entidade' value='1' onChange={this.onTipoChanged.bind(this)} checked={this.state.tipo === 1} />Físico<br />
-                <input type='radio' name='tipo-entidade' value='2' onChange={this.onTipoChanged.bind(this)} checked={this.state.tipo === 2} />Jurídico<br />
-                <br />
+            <form className='entidade-form ui form' onSubmit={this.handleSubmit.bind(this)}>
+                <div className='field'>
+                    <label>Nome</label>
+                    <input type='text' name='nomeEntidade' placeholder='Nome da entidade' />
+                </div>
+                <div className='field'>
+                    <label>Endereço</label>
+                    <input type='text' name='enderecoEntidade' placeholder='Endereço da entidade' />
+                </div>
+                <div className='inline fields'>
+                    <label>Tipo</label>
+                    <div className='field'>
+                        <div className='ui radio checkbox'>
+                            <input type='radio' name='tipoEntidade' value='1' onChange={this.onTipoChanged.bind(this)} checked={this.state.tipo === 1} />
+                            <label>Físico</label>
+                        </div>
+                        <div className='ui radio checkbox'>
+                            <input type='radio' name='tipoEntidade' value='2' onChange={this.onTipoChanged.bind(this)} checked={this.state.tipo === 2} />
+                            <label>Jurídico</label>
+                        </div>
+                    </div>
+                </div>
                 {this.getInputDocumento()}
-                <br />
-                <button type='submit'>Submit</button>
+                <button class="ui button" type="submit">Submit</button>
             </form>
         )
     }
