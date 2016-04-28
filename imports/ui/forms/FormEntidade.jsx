@@ -9,8 +9,9 @@ import CPFInput from '../inputs/CPFInput.jsx'
 export default class FormEntidade extends Component{
     constructor(props={}){
         super(props)
-        this.state = {nome: '', endereco: '', tipo: 1}
+        this.state = {nome: '', endereco: '', tipo: 1, isLoading: false}
         if(props.id){
+            this.state.isLoading = true
             this.initializeForm(props.id)
         }
     }
@@ -70,7 +71,8 @@ export default class FormEntidade extends Component{
                     nome: result.nome,
                     endereco: result.endereco,
                     tipo: result.tipo,
-                    documento: result.documento
+                    documento: result.documento,
+                    isLoading: false
                 })
             }
         })
@@ -114,33 +116,51 @@ export default class FormEntidade extends Component{
         }
     }
 
+    dimmerClass(){
+        let isActive = false
+        let classes = 'ui inverted dimmer '
+
+        if(this.state.isLoading){
+            classes = classes + 'active'
+        } else {
+            classes = classes + 'disabled'
+        }
+
+        return classes
+    }
+
     render(){
         return (
-            <form className='entidade-form ui form' onSubmit={this.handleSubmit.bind(this)}>
-                <div className='field'>
-                    <label>Nome</label>
-                    <input type='text' name='nomeEntidade' placeholder='Nome da entidade' onChange={this.onNomeChange.bind(this)} value={this.state.nome} />
+            <div className='ui basic blurring segment'>
+                <div className={this.dimmerClass()}>
+                    <div className='ui loader' />
                 </div>
-                <div className='field'>
-                    <label>Endereço</label>
-                    <input type='text' name='enderecoEntidade' placeholder='Endereço da entidade' onChange={this.onEnderecoChange.bind(this)} value={this.state.endereco} />
-                </div>
-                <div className='inline fields'>
-                    <label>Tipo</label>
+                <form className='entidade-form ui form' onSubmit={this.handleSubmit.bind(this)}>
                     <div className='field'>
-                        <div className='ui radio checkbox'>
-                            <input type='radio' name='tipoEntidade' value='1' onChange={this.onTipoChanged.bind(this)} checked={this.state.tipo === 1} />
-                            <label>Físico</label>
-                        </div>
-                        <div className='ui radio checkbox'>
-                            <input type='radio' name='tipoEntidade' value='2' onChange={this.onTipoChanged.bind(this)} checked={this.state.tipo === 2} />
-                            <label>Jurídico</label>
+                        <label>Nome</label>
+                        <input type='text' name='nomeEntidade' placeholder='Nome da entidade' onChange={this.onNomeChange.bind(this)} value={this.state.nome} />
+                    </div>
+                    <div className='field'>
+                        <label>Endereço</label>
+                        <input type='text' name='enderecoEntidade' placeholder='Endereço da entidade' onChange={this.onEnderecoChange.bind(this)} value={this.state.endereco} />
+                    </div>
+                    <div className='inline fields'>
+                        <label>Tipo</label>
+                        <div className='field'>
+                            <div className='ui radio checkbox'>
+                                <input type='radio' name='tipoEntidade' value='1' onChange={this.onTipoChanged.bind(this)} checked={this.state.tipo === 1} />
+                                <label>Físico</label>
+                            </div>
+                            <div className='ui radio checkbox'>
+                                <input type='radio' name='tipoEntidade' value='2' onChange={this.onTipoChanged.bind(this)} checked={this.state.tipo === 2} />
+                                <label>Jurídico</label>
+                            </div>
                         </div>
                     </div>
-                </div>
-                {this.getInputDocumento()}
-                <button class="ui button" type="submit">Submit</button>
-            </form>
+                    {this.getInputDocumento()}
+                    <button class="ui button" type="submit">Submit</button>
+                </form>
+            </div>
         )
     }
 }
