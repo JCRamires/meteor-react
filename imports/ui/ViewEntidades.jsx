@@ -11,7 +11,7 @@ import {Entidades} from '../api/collections.js'
 export default class ViewEntidade extends Component {
     renderEntidades(){
         return this.props.entidades.map((entidade) => (
-            <tr key='entidade._id'>
+            <tr key={entidade._id}>
                 <td>{entidade.nome}</td>
                 <td>{entidade.endereco}</td>
                 <td>{entidade.tipo}</td>

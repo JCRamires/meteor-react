@@ -14,5 +14,9 @@ Meteor.methods({
                 documento: values.documento
             }
         )
+    },
+    'entidade.find'(id){
+        check(id, String)
+        return Entidades.findOne({_id: id})
     }
 })

@@ -7,9 +7,12 @@ import CNPJInput from '../inputs/CNPJInput.jsx'
 import CPFInput from '../inputs/CPFInput.jsx'
 
 export default class FormEntidade extends Component{
-    constructor(props){
+    constructor(props={}){
         super(props)
         this.state = {nome: '', endereco: '', tipo: 1}
+        if(props.id){
+            this.initializeForm(props.id)
+        }
     }
 
     componentDidMount(){
@@ -57,6 +60,34 @@ export default class FormEntidade extends Component{
         })
     }
 
+    initializeForm(id){
+        entidade = Meteor.call('entidade.find', id, (error, result) => {
+            if(error){
+                console.log('tratar erro')
+            } else {
+                this.setState({
+                    id: result._id,
+                    nome: result.nome,
+                    endereco: result.endereco,
+                    tipo: result.tipo,
+                    documento: result.documento
+                })
+            }
+        })
+    }
+
+    onNomeChange(e){
+        this.setState({
+            nome: e.currentTarget.value
+        })
+    }
+
+    onEnderecoChange(e){
+        this.setState({
+            endereco: e.currentTarget.value
+        })
+    }
+
     onTipoChanged(e){
         this.setState({
             tipo: Number.parseInt(e.currentTarget.value)
@@ -72,12 +103,12 @@ export default class FormEntidade extends Component{
         switch (tipo) {
             case 1:
                 return (
-                    <CPFInput ref='inputDocumento' />
+                    <CPFInput ref='inputDocumento' documento={this.state.documento} />
                 )
                 break
             case 2:
                 return (
-                    <CNPJInput ref='inputDocumento' />
+                    <CNPJInput ref='inputDocumento' documento={this.state.documento} />
                 )
                 break
         }
@@ -88,11 +119,11 @@ export default class FormEntidade extends Component{
             <form className='entidade-form ui form' onSubmit={this.handleSubmit.bind(this)}>
                 <div className='field'>
                     <label>Nome</label>
-                    <input type='text' name='nomeEntidade' placeholder='Nome da entidade' />
+                    <input type='text' name='nomeEntidade' placeholder='Nome da entidade' onChange={this.onNomeChange.bind(this)} value={this.state.nome} />
                 </div>
                 <div className='field'>
                     <label>Endereço</label>
-                    <input type='text' name='enderecoEntidade' placeholder='Endereço da entidade' />
+                    <input type='text' name='enderecoEntidade' placeholder='Endereço da entidade' onChange={this.onEnderecoChange.bind(this)} value={this.state.endereco} />
                 </div>
                 <div className='inline fields'>
                     <label>Tipo</label>
