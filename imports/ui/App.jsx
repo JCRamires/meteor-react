@@ -4,13 +4,12 @@ import {Link} from 'react-router'
 export default class App extends Component {
     render(){
         return (
-            <div>
-                <h2>
-                    <Link to='/entidade/new'>Cadastrar</Link>
-                </h2>
-                <h2>
-                    <Link to='/entidade'>Ver todas</Link>
-                </h2>
+            <div className='ui basic segment'>
+                <div className='ui menu'>
+                    <Link className='item' to='/entidade'>Entidades</Link>
+                    <Link className='item' to='/entidade/new'>Cadastrar Entidade</Link>
+                </div>
+
                 {this.props.children}
             </div>
         )
