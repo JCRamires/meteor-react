@@ -15,8 +15,14 @@ Meteor.methods({
             }
         )
     },
-    'entidade.find'(id){
-        check(id, String)
-        return Entidades.findOne({_id: id})
+    'entidade.update'(values){
+        check(values, {id: String, nome: String, endereco: String, tipo: Number, documento: String})
+
+        Entidades.update({_id: values.id}, {
+            nome: values.nome,
+            endereco: values.endereco,
+            tipo: values.tipo,
+            documento: values.documento
+        })
     }
 })

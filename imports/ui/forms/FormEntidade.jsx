@@ -19,9 +19,13 @@ export default class FormEntidade extends Component{
                 documento: props.entidade.documento
             }
         } else {
-            this.state = {nome: '', endereco: '', tipo: 1, documento: ''}
+            this.state = this.getDefaultState()
         }
 
+    }
+
+    getDefaultState(){
+        return {nome: '', endereco: '', tipo: 1, documento: ''}
     }
 
     componentDidMount(){
@@ -32,14 +36,20 @@ export default class FormEntidade extends Component{
         this.updateForm()
     }
 
+    // componentWillUnmount(){
+    //     this.setState(this.getDefaultState())
+    // }
+
     updateFormValues(props){
-        this.setState({
-            id: props.entidade._id,
-            nome: props.entidade.nome,
-            endereco: props.entidade.endereco,
-            tipo: props.entidade.tipo,
-            documento: props.entidade.documento
-        })
+        if(props.entidade){
+            this.setState({
+                id: props.entidade._id,
+                nome: props.entidade.nome,
+                endereco: props.entidade.endereco,
+                tipo: props.entidade.tipo,
+                documento: props.entidade.documento
+            })
+        }
     }
 
     componentWillReceiveProps(props){
@@ -73,12 +83,18 @@ export default class FormEntidade extends Component{
                 }
             },
             onSuccess: (event, fields) => {
-                Meteor.call('entidade.insert', {
+                let formData = {
                     nome: fields.nomeEntidade,
                     endereco: fields.enderecoEntidade,
                     tipo: Number.parseInt(fields.tipoEntidade),
                     documento: fields.documentoEntidade
-                })
+                }
+                if(this.props.entidade){
+                    formData.id = this.props.entidade._id
+                    Meteor.call('entidade.update', formData)
+                } else {
+                    Meteor.call('entidade.insert', formData)
+                }
             }
         })
     }
@@ -101,6 +117,12 @@ export default class FormEntidade extends Component{
         })
     }
 
+    onDocumentoChange(e){
+        this.setState({
+            documento: e.currentTarget.value
+        })
+    }
+
     handleSubmit(e){
         e.preventDefault()
     }
@@ -110,11 +132,13 @@ export default class FormEntidade extends Component{
         switch (tipo) {
         case 1:
             return (
-                <CPFInput ref='inputDocumento' documento={this.state.documento} />
+                <CPFInput name='inputDocumento' documento={this.state.documento}
+                    onDocumentoChange={this.onDocumentoChange} />
             )
         case 2:
             return (
-                <CNPJInput ref='inputDocumento' documento={this.state.documento} />
+                <CNPJInput name='inputDocumento' documento={this.state.documento}
+                    onDocumentoChange={this.onDocumentoChange} />
             )
         }
     }
@@ -125,21 +149,25 @@ export default class FormEntidade extends Component{
                 <form className='entidade-form ui form' onSubmit={this.handleSubmit.bind(this)}>
                     <div className='field'>
                         <label>Nome</label>
-                        <input type='text' name='nomeEntidade' placeholder='Nome da entidade' onChange={this.onNomeChange.bind(this)} value={this.state.nome} />
+                        <input type='text' name='nomeEntidade' placeholder='Nome da entidade'
+                            onChange={this.onNomeChange.bind(this)} value={this.state.nome} />
                     </div>
                     <div className='field'>
                         <label>Endereço</label>
-                        <input type='text' name='enderecoEntidade' placeholder='Endereço da entidade' onChange={this.onEnderecoChange.bind(this)} value={this.state.endereco} />
+                        <input type='text' name='enderecoEntidade' placeholder='Endereço da entidade'
+                            onChange={this.onEnderecoChange.bind(this)} value={this.state.endereco} />
                     </div>
                     <div className='inline fields'>
                         <label>Tipo</label>
                         <div className='field'>
                             <div className='ui radio checkbox'>
-                                <input type='radio' name='tipoEntidade' value='1' onChange={this.onTipoChanged.bind(this)} checked={this.state.tipo === 1} />
+                                <input type='radio' name='tipoEntidade' value='1'
+                                    onChange={this.onTipoChanged.bind(this)} checked={this.state.tipo === 1} />
                                 <label>Físico</label>
                             </div>
                             <div className='ui radio checkbox'>
-                                <input type='radio' name='tipoEntidade' value='2' onChange={this.onTipoChanged.bind(this)} checked={this.state.tipo === 2} />
+                                <input type='radio' name='tipoEntidade' value='2'
+                                    onChange={this.onTipoChanged.bind(this)} checked={this.state.tipo === 2} />
                                 <label>Jurídico</label>
                             </div>
                         </div>
