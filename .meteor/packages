@@ -20,3 +20,4 @@ ecmascript              # Enable ECMAScript2015+ syntax in app code
 react-meteor-data
 semantic:ui
 flemay:less-autoprefixer
+meteorhacks:kadira
