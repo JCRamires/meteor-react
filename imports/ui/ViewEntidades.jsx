@@ -1,6 +1,6 @@
 import {Meteor} from 'meteor/meteor'
 
-import React, {Component} from 'react'
+import React, {Component, PropTypes} from 'react'
 
 import { createContainer } from 'meteor/react-meteor-data'
 
@@ -18,10 +18,14 @@ export default class ViewEntidade extends Component {
                 <td>{entidade.documento}</td>
                 <td>
                     <Link className='item' to={`/entidade/${entidade._id}/edit`}><i className="edit icon" /></Link>
-                    <i className="erase icon"></i>
+                    <i className="erase icon" onClick={this.removeEntidade.bind(this, entidade._id)}></i>
                 </td>
             </tr>
         ))
+    }
+
+    removeEntidade(id){
+        Meteor.call('entidade.remove', id)
     }
 
     render(){
@@ -42,6 +46,10 @@ export default class ViewEntidade extends Component {
             </table>
         )
     }
+}
+
+ViewEntidade.propTypes = {
+    entidades: PropTypes.array.isRequired
 }
 
 export default createContainer(() => {

@@ -36,10 +36,6 @@ export default class FormEntidade extends Component{
         this.updateForm()
     }
 
-    // componentWillUnmount(){
-    //     this.setState(this.getDefaultState())
-    // }
-
     updateFormValues(props){
         if(props.entidade){
             this.setState({
@@ -173,7 +169,7 @@ export default class FormEntidade extends Component{
                         </div>
                     </div>
                     {this.getInputDocumento()}
-                    <button className="ui button" type="submit">Submit</button>
+                    <input type="submit" value="Submit" className="ui button" />
                 </form>
             </div>
         )

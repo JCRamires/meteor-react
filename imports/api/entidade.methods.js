@@ -1,3 +1,5 @@
+import {Meteor} from 'meteor/meteor'
+
 import {check} from 'meteor/check'
 
 import {Entidades} from './collections.js'
@@ -24,5 +26,10 @@ Meteor.methods({
             tipo: values.tipo,
             documento: values.documento
         })
+    },
+    'entidade.remove'(id){
+        check(id, String)
+
+        Entidades.remove({_id: id})
     }
 })
