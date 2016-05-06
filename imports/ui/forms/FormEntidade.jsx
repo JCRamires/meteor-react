@@ -1,7 +1,9 @@
 import {Meteor} from 'meteor/meteor'
-import React, {Component} from 'react'
+import React, {Component, PropTypes} from 'react'
 
-import '../../api/collections.js'
+import { createContainer } from 'meteor/react-meteor-data'
+
+import {Entidades} from '../../api/collections.js'
 
 import CNPJInput from '../inputs/CNPJInput.jsx'
 import CPFInput from '../inputs/CPFInput.jsx'
@@ -9,11 +11,17 @@ import CPFInput from '../inputs/CPFInput.jsx'
 export default class FormEntidade extends Component{
     constructor(props={}){
         super(props)
-        this.state = {nome: '', endereco: '', tipo: 1, isLoading: false}
-        if(props.id){
-            this.state.isLoading = true
-            this.initializeForm(props.id)
+        if(props.entidade){
+            this.state = {
+                nome: props.entidade.nome,
+                endereco: props.entidade.endereco,
+                tipo: props.entidade.tipo,
+                documento: props.entidade.documento
+            }
+        } else {
+            this.state = {nome: '', endereco: '', tipo: 1, documento: ''}
         }
+
     }
 
     componentDidMount(){
@@ -22,6 +30,20 @@ export default class FormEntidade extends Component{
 
     componentDidUpdate(){
         this.updateForm()
+    }
+
+    updateFormValues(props){
+        this.setState({
+            id: props.entidade._id,
+            nome: props.entidade.nome,
+            endereco: props.entidade.endereco,
+            tipo: props.entidade.tipo,
+            documento: props.entidade.documento
+        })
+    }
+
+    componentWillReceiveProps(props){
+        this.updateFormValues(props)
     }
 
     updateForm(){
@@ -61,23 +83,6 @@ export default class FormEntidade extends Component{
         })
     }
 
-    initializeForm(id){
-        entidade = Meteor.call('entidade.find', id, (error, result) => {
-            if(error){
-                console.log('tratar erro')
-            } else {
-                this.setState({
-                    id: result._id,
-                    nome: result.nome,
-                    endereco: result.endereco,
-                    tipo: result.tipo,
-                    documento: result.documento,
-                    isLoading: false
-                })
-            }
-        })
-    }
-
     onNomeChange(e){
         this.setState({
             nome: e.currentTarget.value
@@ -103,38 +108,20 @@ export default class FormEntidade extends Component{
     getInputDocumento(){
         let tipo = Number.parseInt(this.state.tipo)
         switch (tipo) {
-            case 1:
-                return (
-                    <CPFInput ref='inputDocumento' documento={this.state.documento} />
-                )
-                break
-            case 2:
-                return (
-                    <CNPJInput ref='inputDocumento' documento={this.state.documento} />
-                )
-                break
+        case 1:
+            return (
+                <CPFInput ref='inputDocumento' documento={this.state.documento} />
+            )
+        case 2:
+            return (
+                <CNPJInput ref='inputDocumento' documento={this.state.documento} />
+            )
         }
-    }
-
-    dimmerClass(){
-        let isActive = false
-        let classes = 'ui inverted dimmer '
-
-        if(this.state.isLoading){
-            classes = classes + 'active'
-        } else {
-            classes = classes + 'disabled'
-        }
-
-        return classes
     }
 
     render(){
         return (
-            <div className='ui basic blurring segment'>
-                <div className={this.dimmerClass()}>
-                    <div className='ui loader' />
-                </div>
+            <div className='ui basic segment'>
                 <form className='entidade-form ui form' onSubmit={this.handleSubmit.bind(this)}>
                     <div className='field'>
                         <label>Nome</label>
@@ -158,9 +145,27 @@ export default class FormEntidade extends Component{
                         </div>
                     </div>
                     {this.getInputDocumento()}
-                    <button class="ui button" type="submit">Submit</button>
+                    <button className="ui button" type="submit">Submit</button>
                 </form>
             </div>
         )
     }
 }
+
+FormEntidade.propTypes = {
+    id: PropTypes.string,
+    entidade: PropTypes.object
+}
+
+export default createContainer((props) => {
+    if(props.id){
+        Meteor.subscribe('entidades')
+        return {
+            entidade: Entidades.findOne({_id: props.id})
+        }
+    }
+
+    return {
+        entidade: undefined
+    }
+}, FormEntidade)
