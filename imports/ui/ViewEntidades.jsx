@@ -56,6 +56,6 @@ export default createContainer(() => {
     Meteor.subscribe('entidades')
 
     return {
-        entidades: Entidades.find({}).fetch()
+        entidades: Entidades.find({owner: Meteor.userId()}).fetch()
     }
 }, ViewEntidade)

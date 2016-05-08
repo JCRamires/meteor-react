@@ -13,14 +13,15 @@ Meteor.methods({
                 nome: values.nome,
                 endereco: values.endereco,
                 tipo: values.tipo,
-                documento: values.documento
+                documento: values.documento,
+                owner: Meteor.userId()
             }
         )
     },
     'entidade.update'(values){
         check(values, {id: String, nome: String, endereco: String, tipo: Number, documento: String})
 
-        Entidades.update({_id: values.id}, {
+        Entidades.update({_id: values.id, owner: Meteor.userId()}, {
             nome: values.nome,
             endereco: values.endereco,
             tipo: values.tipo,
@@ -30,6 +31,6 @@ Meteor.methods({
     'entidade.remove'(id){
         check(id, String)
 
-        Entidades.remove({_id: id})
+        Entidades.remove({_id: id, owner: Meteor.userId()})
     }
 })

@@ -185,7 +185,7 @@ export default createContainer((props) => {
     if(props.id){
         Meteor.subscribe('entidades')
         return {
-            entidade: Entidades.findOne({_id: props.id})
+            entidade: Entidades.findOne({_id: props.id, owner: Meteor.userId()})
         }
     }
 
