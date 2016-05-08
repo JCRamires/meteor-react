@@ -29,11 +29,7 @@ export default class FormEntidade extends Component{
     }
 
     componentDidMount(){
-        this.updateForm()
-    }
-
-    componentDidUpdate(){
-        this.updateForm()
+        this.initializeForm()
     }
 
     updateFormValues(props){
@@ -52,7 +48,7 @@ export default class FormEntidade extends Component{
         this.updateFormValues(props)
     }
 
-    updateForm(){
+    initializeForm(){
         $('.entidade-form').form({
             inline: true,
             fields:{
