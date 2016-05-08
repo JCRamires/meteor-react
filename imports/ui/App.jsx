@@ -1,16 +1,22 @@
 import React, {Component} from 'react'
-import {Link} from 'react-router'
 
-export default class App extends Component {
+import AccountsUIWrapper from './AccountsUIWrapper.jsx'
+
+import {FlowRouter} from 'meteor/kadira:flow-router'
+
+export default class AppContainer extends Component {
     render(){
         return (
             <div className='ui basic segment'>
                 <div className='ui menu'>
-                    <Link className='item' to='/entidade'>Entidades</Link>
-                    <Link className='item' to='/entidade/new'>Cadastrar Entidade</Link>
+                    <a className='item' href={FlowRouter.path('entidades')}>Entidades</a>
+                    <a className='item' href={FlowRouter.path('newEntidade')}>Cadastrar Entidade</a>
+                    <div className="item">
+                        <AccountsUIWrapper />
+                    </div>
                 </div>
 
-                {this.props.children}
+                {this.props.main}
             </div>
         )
     }

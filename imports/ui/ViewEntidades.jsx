@@ -4,7 +4,7 @@ import React, {Component, PropTypes} from 'react'
 
 import { createContainer } from 'meteor/react-meteor-data'
 
-import {Link} from 'react-router'
+import {FlowRouter} from 'meteor/kadira:flow-router'
 
 import {Entidades} from '../api/collections.js'
 
@@ -17,7 +17,8 @@ export default class ViewEntidade extends Component {
                 <td>{entidade.tipo}</td>
                 <td>{entidade.documento}</td>
                 <td>
-                    <Link className='item' to={`/entidade/${entidade._id}/edit`}><i className="edit icon" /></Link>
+                    <a className='item'
+                       href={FlowRouter.path('editEntidade', {id: entidade._id})}><i className='edit icon' /></a>
                     <i className="erase icon" onClick={this.removeEntidade.bind(this, entidade._id)}></i>
                 </td>
             </tr>

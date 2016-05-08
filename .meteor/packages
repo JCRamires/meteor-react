@@ -21,3 +21,7 @@ react-meteor-data
 semantic:ui
 flemay:less-autoprefixer
 meteorhacks:kadira
+accounts-ui
+accounts-password
+kadira:flow-router
+meteorhacks:zones

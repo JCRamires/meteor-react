@@ -1,22 +1,67 @@
 import React from 'react'
-
-import {Router, Route, browserHistory, IndexRoute} from 'react-router'
+import {FlowRouter} from 'meteor/kadira:flow-router'
+import {mount} from 'react-mounter'
 
 import App from '../../ui/App.jsx'
 import Dashboard from '../../ui/Dashboard.jsx'
+import PageNotFound from '../../ui/PageNotFound.jsx'
 import ViewEntidades from '../../ui/ViewEntidades.jsx'
 import Entidade from '../../ui/Entidade.jsx'
 
-export const renderRoutes = () => (
-    <Router history={browserHistory}>
-        <Route path='/' component={App}>
-            <IndexRoute component={Dashboard} />
-            <Route path='entidade'>
-                <IndexRoute component={ViewEntidades} />
-                <Route path='new' component={Entidade} />
-                <Route path=':id' component={Entidade} />
-                <Route path=':id/edit' component={Entidade} />
-            </Route>
-        </Route>
-    </Router>
-)
+FlowRouter.route('/', {
+    name: 'dashboard',
+    action(){
+        mount(App, {
+            main: <Dashboard/>
+        })
+    }
+})
+
+FlowRouter.notFound = {
+    name: 'pageNotFound',
+    action: function() {
+        mount(App, {
+            main: <PageNotFound />
+        })
+    }
+}
+
+const entidadeRoutes = FlowRouter.group({
+    prefix: '/entidade'
+})
+
+entidadeRoutes.route('/', {
+    name: 'entidades',
+    action: () => {
+        mount(App, {
+            main: <ViewEntidades />
+        })
+    }
+})
+
+entidadeRoutes.route('/new', {
+    name: 'newEntidade',
+    action: () => {
+        mount(App, {
+            main: <Entidade />
+        })
+    }
+})
+
+entidadeRoutes.route('/:id', {
+    name: 'viewEntidade',
+    action: (params) => {
+        mount(App, {
+            main: <Entidade id={params.id} />
+        })
+    }
+})
+
+entidadeRoutes.route('/:id/edit', {
+    name: 'editEntidade',
+    action: (params) => {
+        mount(App, {
+            main: <Entidade id={params.id} />
+        })
+    }
+})
