@@ -4,8 +4,6 @@ import React, {Component, PropTypes} from 'react'
 
 import { createContainer } from 'meteor/react-meteor-data'
 
-import {FlowRouter} from 'meteor/kadira:flow-router'
-
 import {Entidades} from '../api/collections.js'
 
 export default class ViewEntidade extends Component {
