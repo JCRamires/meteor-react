@@ -5,7 +5,7 @@ import FormEntidade from './forms/FormEntidade.jsx'
 export default class Entidade extends Component {
     renderForm(){
         return (
-            <FormEntidade id={this.props.params.id}/>
+            <FormEntidade id={this.props.id}/>
         )
     }
 
