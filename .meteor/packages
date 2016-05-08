@@ -22,3 +22,5 @@ semantic:ui
 flemay:less-autoprefixer
 meteorhacks:kadira
 meteorhacks:zones
+accounts-ui
+accounts-password
