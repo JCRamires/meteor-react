@@ -9,6 +9,7 @@ import Dashboard from '../../ui/Dashboard.jsx'
 import ViewEntidades from '../../ui/ViewEntidades.jsx'
 import Entidade from '../../ui/Entidade.jsx'
 import LoginPage from '../../ui/LoginPage.jsx'
+import PageNotFound from '../../ui/PageNotFound.jsx'
 
 function requireAuth(nextState, replace){
     if(!Meteor.userId()){
@@ -27,6 +28,7 @@ export const renderRoutes = () => (
                 <Route path=':id' component={Entidade} />
                 <Route path=':id/edit' component={Entidade} />
             </Route>
+            <Route path='*' component={PageNotFound} />
         </Route>
     </Router>
 )
